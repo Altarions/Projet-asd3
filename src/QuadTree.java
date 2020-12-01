@@ -7,7 +7,11 @@ public class QuadTree {
 	private ImagePNG img;
 	private Integer centerX, centerY, widthX; //centre du quadTree et largeur , int car les images sont de taille 2^n
 	private boolean vide;
-
+	
+	/**
+	 * @role: constructor of QuadTree class with un param.
+	 * @param img: 
+	 */
 	public QuadTree(ImagePNG img){
 		
 		this.setImg(img);
@@ -17,6 +21,13 @@ public class QuadTree {
 		this.vide = false;
 		constructQuadTree();
 	}
+	/**
+	 * @role:
+	 * @param img:
+	 * @param centerX:
+	 * @param centerY:
+	 * @param widthX:
+	 */
 	public QuadTree(ImagePNG img, Integer centerX, Integer centerY, Integer widthX){
 		this.centerX = centerX;
 		this.centerY = centerY;
@@ -27,7 +38,7 @@ public class QuadTree {
 	}
 	/**
 	 * @role:
-	 * @return:
+	 * 
 	 */
 	private void constructQuadTree() {
 		
@@ -110,8 +121,10 @@ public class QuadTree {
 		//}
 	}
 	
-	public void toPng() {
+	public ImagePNG toPng() {
+		ImagePNG newImg = new ImagePNG(this.img);
 		
+		return newImg;
 	}
 	
 	public void toString(QuadTree quadTree) {
@@ -119,14 +132,16 @@ public class QuadTree {
 		if(quadTree.vide != true) {
 			System.out.print("(");
 			toString(quadTree.filsNO);
+			System.out.print(" ");
 			toString(quadTree.filsNE);
+			System.out.print(" ");
 			toString(quadTree.filsSO);
+			System.out.print(" ");
 			toString(quadTree.filsSE);
 			System.out.print(")");
 				
 		}else {
 			System.out.print(ImagePNG.colorToHex(quadTree.getImg().getPixel(quadTree.centerX, quadTree.centerY)));
-			System.out.print(" ");
 		}
 	}
 	public ImagePNG getImg() {
