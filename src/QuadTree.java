@@ -6,7 +6,7 @@ public class QuadTree {
 	private QuadTree filsNO, filsNE, filsSO, filsSE; // NO=1 , NE = 2, SO = 4 , SE = 3
 	private ImagePNG img;
 	private Integer centerX, centerY, widthX; //centre du quadTree et largeur , int car les images sont de taille 2^n
-	private boolean vide;
+	private boolean vide; 
 
 	public QuadTree(ImagePNG img){
 		
@@ -53,16 +53,25 @@ public class QuadTree {
 		
 	}
 	
-	private Color avgColor () {
-		Color avgColorNO = new Color (0,0,0);
-		Color avgColorNE = new Color (0,0,0);
-		Color avgColorSO = new Color (0,0,0);
-		Color avgColorSE = new Color (0,0,0);
-		
-		avgColorNO =filsNO.getImg().getPixel(this.centerX , this.centerY) ;
-		avgColorNE =filsNE.getImg().getPixel(this.centerX , this.centerY) ;
-		avgColorSO =filsSO.getImg().getPixel(this.centerX , this.centerY) ;
-		avgColorSE =filsSE.getImg().getPixel(this.centerX , this.centerY) ;
+	public boolean hasNoKids() {
+		return  this.filsNO.vide && this.filsSE.vide && this.filsNE.vide && this.filsSE.vide ;
+	}
+	
+	public int leavesNumber() {
+		int res = 0;
+		if(this.vide) {
+			res++;
+		}else {
+			res = this.filsNE.leavesNumber()  + this.filsNO.leavesNumber() + this.filsSO.leavesNumber() +  this.filsSE.leavesNumber() ;
+		}
+		return res;
+	}
+	
+	public Color avgColor () {
+		Color avgColorNO =filsNO.getImg().getPixel(this.filsNO.centerX , this.filsNO.centerY) ;
+		Color avgColorNE =filsNE.getImg().getPixel(this.filsNE.centerX , this.filsNE.centerY) ;
+		Color avgColorSO =filsSO.getImg().getPixel(this.filsSO.centerX , this.filsSO.centerY) ;
+		Color avgColorSE =filsSE.getImg().getPixel(this.filsSE.centerX , this.filsSE.centerY) ;
 
 		int avgColorRed   = (avgColorNO.getRed()   + avgColorNE.getRed()   + avgColorSO.getRed()   + avgColorSE.getRed()   )  /4;
 		int avgColorBlue  = (avgColorNO.getBlue()  + avgColorNE.getBlue()  + avgColorSO.getBlue()  + avgColorSE.getBlue()  )  /4;
@@ -72,35 +81,39 @@ public class QuadTree {
 	}
 	
 	
-	private double colorimetricDifference () {
-		Color avgColorNO = new Color (0,0,0);
-		Color avgColorNE = new Color (0,0,0);
-		Color avgColorSO = new Color (0,0,0);
-		Color avgColorSE = new Color (0,0,0);
+	private int colorimetricDifferenceOne (Color x) {
 		
-		avgColorNO =filsNO.getImg().getPixel(this.centerX , this.centerY) ;
-		avgColorNE =filsNE.getImg().getPixel(this.centerX , this.centerY) ;
-		avgColorSO =filsSO.getImg().getPixel(this.centerX , this.centerY) ;
-		avgColorSE =filsSE.getImg().getPixel(this.centerX , this.centerY) ;
-		
-		int Ri = (avgColorNO.getRed()  + avgColorNE.getRed()   + avgColorSO.getRed()   + avgColorSE.getRed());
-		int Rm = this.avgColor().getRed();
-		int Bi = (avgColorNO.getBlue()  + avgColorNE.getBlue()  + avgColorSO.getBlue()  + avgColorSE.getBlue());
-		int Bm = this.avgColor().getBlue();
-		int Vi = (avgColorNO.getGreen() + avgColorNE.getGreen() + avgColorSO.getGreen() + avgColorSE.getGreen());
-		int Vm =this.avgColor().getGreen();
+		int Ri = (this.getImg().getPixel(this.centerX, this.centerY).getRed());
+		int Rm = x.getRed();
+		int Bi = (this.getImg().getPixel(this.centerX, this.centerY).getBlue());
+		int Bm = x.getBlue();
+		int Vi = (this.getImg().getPixel(this.centerX, this.centerY).getGreen());
+		int Vm = x.getGreen();
 		
 		int Rr = (Ri - Rm ) * (Ri - Rm );
 		int Vr = (Vi - Vm ) * (Vi - Vm );
 		int Br = (Bi - Bm ) * (Bi - Bm );
-		double gamma = Math.sqrt((Rr+Vr+Br)/ 3 ) ;
+		int gamma = (int) Math.sqrt((Rr+Vr+Br)/ 3 ) ;
 		return gamma;
+	}
+	public int colorimetricDifference(Color x) {
+		 int res1 =  Math.max(filsNO.colorimetricDifferenceOne(x) , filsNE.colorimetricDifferenceOne(x));
+		 int res2 =  Math.max(filsSO.colorimetricDifferenceOne(x) , filsSE.colorimetricDifferenceOne(x));
+		 int res =   Math.max(res1 ,res2);
+		 return res;
 	}
 	
 	public void compressDelta(Integer delta) {
-		double test = this.colorimetricDifference();
-		if ( test  <= delta) {
-			// replace 4 nodes by the moyen color
+		if (delta > 192 || delta < 0) {
+			System.out.println("detla's value is wrong");
+		}else {
+			int test = (int) this.colorimetricDifference(avgColor());
+			Color deltaColor = new Color(test,test,test);
+			if ( test  <= delta) {
+				// replace 4 nodes by the avg color
+				this.deleteKids();
+				this.img.setPixel(this.centerX,this.centerY, deltaColor);
+			}
 		}
 	}
 	
@@ -109,13 +122,18 @@ public class QuadTree {
 			// replace 4 nodes 
 		//}
 	}
+	public void deleteKids() {
+		this.filsNE = null;
+		this.filsNO = null;
+		this.filsSE = null;
+		this.filsSO = null;
+	}
 	
 	public void toPng() {
 		
 	}
 	
 	public void toString(QuadTree quadTree) {
-		;
 		if(quadTree.vide != true) {
 			System.out.print("(");
 			toString(quadTree.filsNO);
@@ -125,8 +143,8 @@ public class QuadTree {
 			System.out.print(")");
 				
 		}else {
-			System.out.print(ImagePNG.colorToHex(quadTree.getImg().getPixel(quadTree.centerX, quadTree.centerY)));
-			System.out.print(" ");
+			System.out.print((quadTree.getImg().getPixel(quadTree.centerX, quadTree.centerY))); //ImagePNG.colorToHex
+			System.out.print("  ");
 		}
 	}
 	public ImagePNG getImg() {
@@ -134,5 +152,23 @@ public class QuadTree {
 	}
 	public void setImg(ImagePNG img) {
 		this.img = img;
+	}
+	public QuadTree getfilsNO() {
+		return filsNO;
+	}
+	public QuadTree getfilsNE() {
+		return filsNE;
+	}
+	public QuadTree getfilsSO() {
+		return filsSO;
+	}
+	public QuadTree getfilsSE() {
+		return filsSE;
+	}
+	public int getcenterX() {
+		return centerX;
+	}
+	public int getcenterY() {
+		return centerY;
 	}
 }

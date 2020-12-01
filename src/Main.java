@@ -8,10 +8,16 @@ public class Main {
     {
         try {
 
-            ImagePNG png = new ImagePNG("./src/pngs/16.png");
+            ImagePNG png = new ImagePNG("./src/pngs/4.png");
             
             QuadTree test = new QuadTree(png);
             
+            test.toString(test);
+            System.out.println(test.leavesNumber());
+            System.out.println(test.avgColor());
+            System.out.println(test.getfilsSE().getImg().getPixel(test.getfilsSE().getcenterX() , test.getfilsSE().getcenterY()));
+            System.out.println(test.colorimetricDifference(test.avgColor()));
+            test.getfilsNO().compressDelta(129);
             test.toString(test);
             /*
             ImagePNG pngNB = new ImagePNG(png); // une copie
@@ -43,9 +49,9 @@ public class Main {
             pngNB.save("./src/pngs/128-gnu.png"+"NB");
             pngR.save("./src/pngs/128-gnu.png"+"R");
 
-            // 2. COMPARAISON DES RÃ‰SULTATS
+            // 2. COMPARAISON DES RéSULTATS
 
-            // calcul des indices de similaritÃ©
+            // calcul des indices de similarité
             double siNB = ImagePNG.computeEQM(png,pngNB);
             double siR = ImagePNG.computeEQM(png,pngR);
 
@@ -59,9 +65,14 @@ public class Main {
             double wR = Math.ceil(10000.0*ficR.length() / fic.length())/100.0;
 
             // affichage des critÃ¨res
-            System.out.println("NB: taille="+wNB+"% / qualitÃ©="+siNB+"%");
-            System.out.println("R: taille="+wR+"% / qualitÃ©="+siR+"%");
-			*/
+
+            System.out.println("NB: taille="+wNB+"% / qualité="+siNB+"%");
+            System.out.println("R: taille="+wR+"% / qualité="+siR+"%");
+			
+
+            System.out.println("NB: taille="+wNB+"% / qualité="+siNB+"%");
+            System.out.println("R: taille="+wR+"% / qualité="+siR+"%");
+            */
         } catch (Exception e) {
             e.printStackTrace();
         }
