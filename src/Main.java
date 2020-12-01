@@ -8,7 +8,12 @@ public class Main {
     {
         try {
 
-            ImagePNG png = new ImagePNG("./src/pngs/128-gnu.png");
+            ImagePNG png = new ImagePNG("./src/pngs/1024-cube.png");
+            
+            QuadTree test = new QuadTree(png);
+            
+            test.toString(test);
+            /*
             ImagePNG pngNB = new ImagePNG(png); // une copie
             ImagePNG pngR = new ImagePNG(png); // une autre copie
 
@@ -56,7 +61,7 @@ public class Main {
             // affichage des critères
             System.out.println("NB: taille="+wNB+"% / qualité="+siNB+"%");
             System.out.println("R: taille="+wR+"% / qualité="+siR+"%");
-
+			*/
         } catch (Exception e) {
             e.printStackTrace();
         }
