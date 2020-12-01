@@ -33,8 +33,7 @@ public class QuadTree {
 		
 		if(this.widthX > 1) {
 			Integer a = this.widthX/2;
-			System.out.println(this.centerX+","+this.centerY);
-			
+
 			this.filsNO = new QuadTree(this.getImg(), this.centerX-a, this.centerY-a, a);
 			this.filsNE = new QuadTree(this.getImg(), this.centerX+a, this.centerY-a, a);
 			this.filsSO = new QuadTree(this.getImg(), this.centerX-a, this.centerY+a, a);

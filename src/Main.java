@@ -8,7 +8,7 @@ public class Main {
     {
         try {
 
-            ImagePNG png = new ImagePNG("./src/pngs/1024-cube.png");
+            ImagePNG png = new ImagePNG("./src/pngs/16.png");
             
             QuadTree test = new QuadTree(png);
             
