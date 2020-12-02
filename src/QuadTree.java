@@ -4,23 +4,10 @@ import java.awt.Color;
 public class QuadTree {
 	
 	private QuadTree filsNO, filsNE, filsSO, filsSE; // NO=1 , NE = 2, SO = 4 , SE = 3
-	private ImagePNG img;
 	private Integer centerX, centerY, widthX; //centre du quadTree et largeur , int car les images sont de taille 2^n
 	private boolean vide;
+	private Color colorPixel;
 	
-	/**
-	 * @role: constructor of QuadTree class with un param.
-	 * @param img: 
-	 */
-	public QuadTree(ImagePNG img){
-		
-		this.setImg(img);
-		this.centerX = img.width()/2;
-		this.centerY = img.width()/2;
-		this.widthX = img.width()/2;
-		this.setVide(false);
-		constructQuadTree();
-	}
 	/**
 	 * @role:
 	 * @param img:
@@ -32,37 +19,43 @@ public class QuadTree {
 		this.centerX = centerX;
 		this.centerY = centerY;
 		this.widthX = widthX;
-		this.setImg(img);
 		this.setVide(false);
-		constructQuadTree();
-	}
-	/**
-	 * @role:
-	 * 
-	 */
-	private void constructQuadTree() {
 		
 		if(this.widthX > 1) {
 			Integer a = this.widthX/2;
 
-			this.filsNO = new QuadTree(this.getImg(), this.centerX-a, this.centerY-a, a);
-			this.filsNE = new QuadTree(this.getImg(), this.centerX+a, this.centerY-a, a);
-			this.filsSO = new QuadTree(this.getImg(), this.centerX-a, this.centerY+a, a);
-			this.filsSE = new QuadTree(this.getImg(), this.centerX+a, this.centerY+a, a);
+			this.filsNO = new QuadTree(img, this.centerX-a, this.centerY-a, a);
+			this.filsNE = new QuadTree(img, this.centerX+a, this.centerY-a, a);
+			this.filsSO = new QuadTree(img, this.centerX-a, this.centerY+a, a);
+			this.filsSE = new QuadTree(img, this.centerX+a, this.centerY+a, a);
 			
 		}else {
 			if(this.isVide() != true && this.widthX == 1) {
-				this.filsNO = new QuadTree(this.getImg(), this.centerX-1, this.centerY-1, 0);
-				this.filsNE = new QuadTree(this.getImg(), this.centerX, this.centerY-1, 0);
-				this.filsSO = new QuadTree(this.getImg(), this.centerX-1, this.centerY, 0);
-				this.filsSE = new QuadTree(this.getImg(), this.centerX, this.centerY, 0);
+				this.filsNO = new QuadTree(img, this.centerX-1, this.centerY-1, 0);
+				this.filsNE = new QuadTree(img, this.centerX, this.centerY-1, 0);
+				this.filsSO = new QuadTree(img, this.centerX-1, this.centerY, 0);
+				this.filsSE = new QuadTree(img, this.centerX, this.centerY, 0);
 				
 			}else {
 				this.setVide(true);
+				this.setColorPixel(img.getPixel(this.centerX, this.centerY));
 			}
 		}
-		
 	}
+	
+	public QuadTree getfilsNO() {return filsNO;}
+	public QuadTree getfilsNE() {return filsNE;}
+	public QuadTree getfilsSO() {return filsSO;}
+	public QuadTree getfilsSE() {return filsSE;}
+	
+	public int getcenterX() {return centerX;}
+	public int getcenterY() {return centerY;}
+	
+	public boolean isVide() {return vide;}
+	public void setVide(boolean vide) {this.vide = vide;}
+	
+	public Color getColorPixel() {return colorPixel;}
+	public void setColorPixel(Color colorPixel) {this.colorPixel = colorPixel;}
 	
 	public boolean hasNoKids() {
 		return  this.filsNO.isVide() && this.filsSE.isVide() && this.filsNE.isVide() && this.filsSE.isVide() ;
@@ -79,10 +72,10 @@ public class QuadTree {
 	}
 	
 	public Color avgColor () {
-		Color avgColorNO =filsNO.getImg().getPixel(this.filsNO.centerX , this.filsNO.centerY) ;
-		Color avgColorNE =filsNE.getImg().getPixel(this.filsNE.centerX , this.filsNE.centerY) ;
-		Color avgColorSO =filsSO.getImg().getPixel(this.filsSO.centerX , this.filsSO.centerY) ;
-		Color avgColorSE =filsSE.getImg().getPixel(this.filsSE.centerX , this.filsSE.centerY) ;
+		Color avgColorNO =filsNO.getColorPixel();
+		Color avgColorNE =filsNE.getColorPixel();
+		Color avgColorSO =filsSO.getColorPixel();
+		Color avgColorSE =filsSE.getColorPixel();
 
 		int avgColorRed   = (avgColorNO.getRed()   + avgColorNE.getRed()   + avgColorSO.getRed()   + avgColorSE.getRed()   )  /4;
 		int avgColorBlue  = (avgColorNO.getBlue()  + avgColorNE.getBlue()  + avgColorSO.getBlue()  + avgColorSE.getBlue()  )  /4;
@@ -94,11 +87,11 @@ public class QuadTree {
 	
 	private int colorimetricDifferenceOne (Color x) {
 		
-		int Ri = (this.getImg().getPixel(this.centerX, this.centerY).getRed());
+		int Ri = (this.getColorPixel().getRed());
 		int Rm = x.getRed();
-		int Bi = (this.getImg().getPixel(this.centerX, this.centerY).getBlue());
+		int Bi = (this.getColorPixel().getBlue());
 		int Bm = x.getBlue();
-		int Vi = (this.getImg().getPixel(this.centerX, this.centerY).getGreen());
+		int Vi = (this.getColorPixel().getGreen());
 		int Vm = x.getGreen();
 		
 		int Rr = (Ri - Rm ) * (Ri - Rm );
@@ -123,7 +116,7 @@ public class QuadTree {
 			if ( test  <= delta) {
 				// replace 4 nodes by the avg color
 				this.deleteKids();
-				this.img.setPixel(this.centerX,this.centerY, deltaColor);
+				//this.img.setPixel(this.centerX,this.centerY, deltaColor);
 			}
 		}
 	}
@@ -141,11 +134,6 @@ public class QuadTree {
 		this.filsSO = null;
 	}
 	
-	public ImagePNG toPng() {
-		ImagePNG newImg = new ImagePNG(this.img);
-		
-		return newImg;
-	}
 	
 	public void toString(QuadTree quadTree) {
 		if(quadTree.isVide() != true) {
@@ -160,38 +148,9 @@ public class QuadTree {
 			System.out.print(")");
 				
 		}else {
-			System.out.print(ImagePNG.colorToHex(quadTree.getImg().getPixel(quadTree.centerX, quadTree.centerY)));
+			System.out.print(ImagePNG.colorToHex(quadTree.getColorPixel()));
 
 		}
 	}
-	public ImagePNG getImg() {
-		return img;
-	}
-	public void setImg(ImagePNG img) {
-		this.img = img;
-	}
-	public QuadTree getfilsNO() {
-		return filsNO;
-	}
-	public QuadTree getfilsNE() {
-		return filsNE;
-	}
-	public QuadTree getfilsSO() {
-		return filsSO;
-	}
-	public QuadTree getfilsSE() {
-		return filsSE;
-	}
-	public int getcenterX() {
-		return centerX;
-	}
-	public int getcenterY() {
-		return centerY;
-	}
-	public boolean isVide() {
-		return vide;
-	}
-	public void setVide(boolean vide) {
-		this.vide = vide;
-	}
+
 }
