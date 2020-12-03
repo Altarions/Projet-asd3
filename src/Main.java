@@ -12,13 +12,13 @@ public class Main {
             
             QuadTree test = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
             
-            test.toString(test);
-            System.out.println(test.leavesNumber());
+            System.out.println(test.toString("",test));
+            /*System.out.println(test.leavesNumber());
             System.out.println(test.avgColor());
             System.out.println(test.getfilsSE().getColorPixel());
             System.out.println(test.colorimetricDifference(test.avgColor()));
             test.getfilsNO().compressDelta(129);
-            test.toString(test);
+            */
             /*
             ImagePNG pngNB = new ImagePNG(png); // une copie
             ImagePNG pngR = new ImagePNG(png); // une autre copie

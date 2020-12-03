@@ -135,22 +135,23 @@ public class QuadTree {
 	}
 	
 	
-	public void toString(QuadTree quadTree) {
+	public String toString(String chaine, QuadTree quadTree) {
 		if(quadTree.isVide() != true) {
-			System.out.print("(");
-			toString(quadTree.filsNO);
-			System.out.print(" ");
-			toString(quadTree.filsNE);
-			System.out.print(" ");
-			toString(quadTree.filsSO);
-			System.out.print(" ");
-			toString(quadTree.filsSE);
-			System.out.print(")");
+			chaine += ("(");
+			chaine = toString(chaine, quadTree.filsNO);
+			chaine += (" ");
+			chaine = toString(chaine, quadTree.filsNE);
+			chaine += (" ");
+			chaine = toString(chaine, quadTree.filsSO);
+			chaine += (" ");
+			chaine = toString(chaine, quadTree.filsSE);
+			chaine += (")");
 				
 		}else {
-			System.out.print(ImagePNG.colorToHex(quadTree.getColorPixel()));
-
+			chaine += ImagePNG.colorToHex(quadTree.getColorPixel());
+			
 		}
+		return chaine;
 	}
 
 }
