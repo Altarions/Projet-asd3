@@ -125,7 +125,19 @@ public class QuadTree {
 			} 
 		}
 	}
-	
+	public QuadTree findMin() {
+		if (parentOf4Colors()) {
+			return this;
+		}else {
+			filsNE.findMin();
+			filsNO.findMin();
+			filsSE.findMin();
+			filsSO.findMin();
+		}
+		
+		
+		
+	}
 	public void compressPhi(Integer phi) {
 		if( phi < 0) {
 			System.out.println("phi cant be negative");

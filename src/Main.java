@@ -12,25 +12,24 @@ public class Main {
             
             QuadTree test = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
             
-<<<<<<< Updated upstream
-            System.out.println(test.toString("",test));
+
+            System.out.println(test.toString(" ",test));
             /*System.out.println(test.leavesNumber());
             System.out.println(test.avgColor());
             System.out.println(test.getfilsSE().getColorPixel());
             System.out.println(test.colorimetricDifference(test.avgColor()));
             test.getfilsNO().compressDelta(129);
             */
-=======
-            test.toString(test);
+
+            test.toString( " " ,test);
             System.out.println(test.leavesNumber());
             //System.out.println(test.getfilsNO().avgColor());
             //System.out.println(test.getfilsSE().colorimetricDifference(test.getfilsSE().avgColor()));
            // System.out.println(test.getfilsNO().getfilsNE().avgColor());
             test.compressPhi(10);
-            test.toString(test);
+            test.toString(" ", test);
             System.out.println(test.leavesNumber());
->>>>>>> Stashed changes
-            /*
+
             ImagePNG pngNB = new ImagePNG(png); // une copie
             ImagePNG pngR = new ImagePNG(png); // une autre copie
 
