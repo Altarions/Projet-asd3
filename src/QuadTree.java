@@ -155,18 +155,18 @@ public class QuadTree {
 	public String toString(String chaine, QuadTree quadTree) {
 		if(quadTree.isVide() != true) {
 			chaine += ("(");
-			toString(chaine, quadTree.filsNO);
+			chaine = toString(chaine, quadTree.filsNO);
 			chaine += (" ");
-			toString(chaine, quadTree.filsNE);
+			chaine = toString(chaine, quadTree.filsNE);
 			chaine += (" ");
-			toString(chaine, quadTree.filsSO);
+			chaine = toString(chaine, quadTree.filsSO);
 			chaine += (" ");
-			toString(chaine, quadTree.filsSE);
+			chaine = toString(chaine, quadTree.filsSE);
 			chaine += (")");
 				
 		}else {
 			chaine += ImagePNG.colorToHex(quadTree.getColorPixel());
-			System.out.println(chaine);
+			
 		}
 		return chaine;
 	}
