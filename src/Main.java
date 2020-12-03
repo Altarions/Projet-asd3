@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -27,6 +30,7 @@ public class Main {
         	}else {
         		System.out.println("Le choix n'existe pas !");
         	}
+        	System.out.println("\n\n\n\n\n\n");
         	main(args);
         	
         } catch (Exception e) {
@@ -51,8 +55,8 @@ public class Main {
 	private static void loadImg() throws IOException {
 		
 		System.out.println("Entrez l'adresse du fichier");
-		String nameFile = sc.next();	
-		png = new ImagePNG(nameFile);
+		//String nameFile = sc.next();	
+		png = new ImagePNG("./src/pngs/4.png");
 		quadTree = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
 		System.out.println("Chargement réussi");
 		
@@ -69,8 +73,19 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 	}
-	private static void saveTxt() {
-		System.out.println(quadTree.toString()); 
+	private static void saveTxt() throws IOException {
+		File dataFile = new File("./src/txt/result.txt");
+		
+		if (!dataFile.exists()) {
+			dataFile.delete();
+		    dataFile.createNewFile();
+		}
+		 FileWriter fw = new FileWriter(dataFile.getAbsoluteFile());
+		 BufferedWriter bw = new BufferedWriter(fw);
+		 bw.write(quadTree.toString("",quadTree));
+		 bw.close();
+
+		 System.out.println("Ajout réussi");
 		
 	}
 	private static void compare() {
