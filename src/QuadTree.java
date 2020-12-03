@@ -121,6 +121,8 @@ public class QuadTree {
 		}
 	}
 	
+	
+	
 	public void compressPhi(Integer phi) {
 		//if ( this.widthx <= phi)){
 			// replace 4 nodes 
@@ -134,23 +136,39 @@ public class QuadTree {
 		this.filsSO = null;
 	}
 	
-	
-	public void toString(QuadTree quadTree) {
+	public ImagePNG toPNG(ImagePNG img, QuadTree quadTree) {
+		ImagePNG newImg =  new ImagePNG(img);
+		
 		if(quadTree.isVide() != true) {
-			System.out.print("(");
-			toString(quadTree.filsNO);
-			System.out.print(" ");
-			toString(quadTree.filsNE);
-			System.out.print(" ");
-			toString(quadTree.filsSO);
-			System.out.print(" ");
-			toString(quadTree.filsSE);
-			System.out.print(")");
+			newImg = toPNG(newImg, quadTree.filsNO);
+			newImg = toPNG(newImg, quadTree.filsNE);
+			newImg = toPNG(newImg, quadTree.filsSO);
+			newImg = toPNG(newImg, quadTree.filsSE);
 				
 		}else {
-			System.out.print(ImagePNG.colorToHex(quadTree.getColorPixel()));
-
+			newImg.setPixel(quadTree.centerX, quadTree.centerY, quadTree.colorPixel);
 		}
+		
+		return newImg;
+	}
+	
+	public String toString(String chaine, QuadTree quadTree) {
+		if(quadTree.isVide() != true) {
+			chaine += ("(");
+			toString(chaine, quadTree.filsNO);
+			chaine += (" ");
+			toString(chaine, quadTree.filsNE);
+			chaine += (" ");
+			toString(chaine, quadTree.filsSO);
+			chaine += (" ");
+			toString(chaine, quadTree.filsSE);
+			chaine += (")");
+				
+		}else {
+			chaine += ImagePNG.colorToHex(quadTree.getColorPixel());
+			System.out.println(chaine);
+		}
+		return chaine;
 	}
 
 }
