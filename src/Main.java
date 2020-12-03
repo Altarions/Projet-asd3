@@ -134,7 +134,7 @@ public class Main {
 		 bw.write(quadTree.toString("",quadTree));
 		 bw.close();
 
-		 System.out.println("/nAjout réussi");
+		 System.out.println("\nAjout réussi");
 		
 	}
 	private static void compare() {
