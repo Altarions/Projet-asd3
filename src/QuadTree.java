@@ -57,10 +57,6 @@ public class QuadTree {
 	public Color getColorPixel() {return colorPixel;}
 	public void setColorPixel(Color colorPixel) {this.colorPixel = colorPixel;}
 	
-	public boolean hasNoKids() {
-		return  this.filsNO.isVide() && this.filsSE.isVide() && this.filsNE.isVide() && this.filsSE.isVide() ;
-	}
-	
 	public int leavesNumber() {
 		int res = 0;
 		if(this.isVide()) {
@@ -104,34 +100,67 @@ public class QuadTree {
 		 int res1 =  Math.max(filsNO.colorimetricDifferenceOne(x) , filsNE.colorimetricDifferenceOne(x));
 		 int res2 =  Math.max(filsSO.colorimetricDifferenceOne(x) , filsSE.colorimetricDifferenceOne(x));
 		 int res =   Math.max(res1 ,res2);
-		 return res;
+		 return res; 
 	}
 	
 	public void compressDelta(Integer delta) {
 		if (delta > 192 || delta < 0) {
 			System.out.println("detla's value is wrong");
 		}else {
-			int test = (int) this.colorimetricDifference(avgColor());
-			Color deltaColor = new Color(test,test,test);
-			if ( test  <= delta) {
+			if (parentOf4Colors()) {
+		
+				int test = (int) this.colorimetricDifference(this.avgColor());
+				Color deltaColor = new Color(test,test,test);
+				if ( test  <= delta) {
 				// replace 4 nodes by the avg color
-				this.deleteKids();
-				//this.img.setPixel(this.centerX,this.centerY, deltaColor);
-			}
+				
+					this.setColorPixel(deltaColor);
+					this.deleteKids();
+				}
+			}else {
+				filsNE.compressDelta(delta);
+				filsNO.compressDelta(delta);
+				filsSE.compressDelta(delta);
+				filsSO.compressDelta(delta);
+			} 
 		}
 	}
 	
 	public void compressPhi(Integer phi) {
-		//if ( this.widthx <= phi)){
-			// replace 4 nodes 
-		//}
+		if( phi < 0) {
+			System.out.println("phi cant be negative");
+			
+		}else {
+			if ( this.leavesNumber() > phi){
+				
+				if (this.parentOf4Colors()) {
+					Color deltaColor = this.avgColor();
+					this.setColorPixel(deltaColor);
+					this.deleteKids();
+				}else {
+					filsNE.compressPhi(phi);
+					filsNO.compressPhi(phi);
+					filsSE.compressPhi(phi);
+					filsSO.compressPhi(phi);
+				}
+			}
+			
+		}
+				
 	}
+	
+	public boolean parentOf4Colors() {
+		boolean res = (this.getfilsNE().isVide() && this.getfilsNO().isVide() && this.getfilsSE().isVide() && this.getfilsSO().isVide());
+		return res;
+	}
+	
 	public void deleteKids() {
-		this.vide = true;
+		
 		this.filsNE = null;
 		this.filsNO = null;
 		this.filsSE = null;
 		this.filsSO = null;
+		this.vide = true;
 	}
 	
 	
