@@ -97,7 +97,7 @@ public class Main {
     		
     		png = new ImagePNG(adress);
     		quadTree = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
-    		System.out.println("Chargement réussi");
+    		System.out.println("\nChargement réussi\n");
     		
     	}else {
     		System.out.println("\nLe choix n'existe pas !\n");
@@ -107,7 +107,13 @@ public class Main {
 		
 	}
 	private static void delta() {
-		// TODO Auto-generated method stub
+		
+		System.out.println("Choisissez un delta pour la compression : ");
+		int delta = sc.nextInt();
+		
+		quadTree.compressDelta(delta);
+		
+		System.out.println("\nCompressé\n");
 		
 	}
 	private static void phi() {
@@ -119,7 +125,7 @@ public class Main {
 		ImagePNG newPng = quadTree.toPNG(png, quadTree);
 		
         newPng.save("./src/result/result.png");
-        System.out.println("Ajout réussi");
+        System.out.println("\nAjout réussi\n");
 		
 	}
 	
@@ -139,7 +145,7 @@ public class Main {
 		 bw.write(quadTree.toString());
 		 bw.close();
 
-		 System.out.println("\nAjout réussi");
+		 System.out.println("\nAjout réussi\n");
 		
 	}
 	private static void compare() {

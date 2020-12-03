@@ -60,25 +60,7 @@ public class QuadTree {
 	public void setColorPixel(Color colorPixel) {this.colorPixel = colorPixel;}
 	
 	/**
-	 * @role
-	 */
-	public void compressWithOutLoss() {
-	    if(parentOf4Colors()) {
-	        if (sameKids()) {
-	            this.setColorPixel( this.getfilsNO().getColorPixel());
-	            this.deleteKids();
-	        }
-	    }else {
-	        filsNE.compressWithOutLoss();
-	        filsNO.compressWithOutLoss();
-	        filsSE.compressWithOutLoss();
-	        filsSO.compressWithOutLoss();
-	    }
-	}
-	
-	
-	/**
-	 * @role:
+	 * @role: compress the quadtree.
 	 * @param delta
 	 */
 	public void compressDelta(Integer delta) {
@@ -86,6 +68,10 @@ public class QuadTree {
             System.out.println("detla's value is wrong");
         }else {
             if (parentOf4Colors()) {
+            	if(sameKids()) {
+            		this.setColorPixel(this.getfilsNO().getColorPixel());
+            		this.deleteKids();
+            	}
 
                 int test = (int) this.colorimetricDifference(this.avgColor());
                 Color deltaColor = new Color(test,test,test);
@@ -180,11 +166,12 @@ public class QuadTree {
 		 return res;
 	}
 	public void deleteKids() {
-		this.vide = true;
+		
 		this.filsNE = null;
 		this.filsNO = null;
 		this.filsSE = null;
 		this.filsSO = null;
+		this.vide = true;
 	}
 	public boolean hasNoKids() {
 		return  this.filsNO.isVide() && this.filsSE.isVide() && this.filsNE.isVide() && this.filsSE.isVide() ;
