@@ -9,10 +9,12 @@ public class Main {
         try {
 
             ImagePNG png = new ImagePNG("./src/pngs/32-tux.png");
+            ImagePNG pngNB = new ImagePNG(png); // une copie
             
             QuadTree test = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
             
 
+<<<<<<< HEAD
             System.out.println(test.toString(" ",test));
             /*System.out.println(test.leavesNumber());
             System.out.println(test.avgColor());
@@ -22,14 +24,27 @@ public class Main {
             */
 
             test.toString( " " ,test);
+=======
+            System.out.println(test.toString("",test));
+>>>>>>> master
             System.out.println(test.leavesNumber());
             //System.out.println(test.getfilsNO().avgColor());
             //System.out.println(test.getfilsSE().colorimetricDifference(test.getfilsSE().avgColor()));
            // System.out.println(test.getfilsNO().getfilsNE().avgColor());
+<<<<<<< HEAD
             test.compressPhi(10);
             test.toString(" ", test);
             System.out.println(test.leavesNumber());
 
+=======
+            test.compressDelta(10);
+            System.out.println(test.toString("",test));
+            System.out.println(test.leavesNumber());
+            pngNB = test.toPNG(png, test);
+            pngNB.save("./src/pngs/test.png");
+
+            /*
+>>>>>>> master
             ImagePNG pngNB = new ImagePNG(png); // une copie
             ImagePNG pngR = new ImagePNG(png); // une autre copie
 

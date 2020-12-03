@@ -175,6 +175,21 @@ public class QuadTree {
 		this.vide = true;
 	}
 	
+	public ImagePNG toPNG(ImagePNG img, QuadTree quadTree) {
+		ImagePNG newImg =  new ImagePNG(img);
+		
+		if(quadTree.isVide() != true) {
+			newImg = toPNG(newImg, quadTree.filsNO);
+			newImg = toPNG(newImg, quadTree.filsNE);
+			newImg = toPNG(newImg, quadTree.filsSO);
+			newImg = toPNG(newImg, quadTree.filsSE);
+				
+		}else {
+			newImg.setPixel(quadTree.centerX, quadTree.centerY, quadTree.colorPixel);
+		}
+		
+		return newImg;
+	}
 	
 	public String toString(String chaine, QuadTree quadTree) {
 		if(quadTree.isVide() != true) {
