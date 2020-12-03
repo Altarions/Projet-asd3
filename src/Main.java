@@ -9,6 +9,7 @@ public class Main {
         try {
 
             ImagePNG png = new ImagePNG("./src/pngs/32-tux.png");
+            ImagePNG pngNB = new ImagePNG(png); // une copie
             
             QuadTree test = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
             
@@ -21,7 +22,8 @@ public class Main {
             test.compressDelta(10);
             System.out.println(test.toString("",test));
             System.out.println(test.leavesNumber());
-            
+            pngNB = test.toPNG(png, test);
+            pngNB.save("./src/pngs/test.png");
 
             /*
             ImagePNG pngNB = new ImagePNG(png); // une copie
