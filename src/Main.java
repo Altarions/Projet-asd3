@@ -122,6 +122,11 @@ public class Main {
         System.out.println("Ajout réussi");
 		
 	}
+	
+	/**
+	 * @role: 
+	 * @throws IOException
+	 */
 	private static void saveTxt() throws IOException {
 		File dataFile = new File("./src/result/result.txt");
 		
@@ -131,7 +136,7 @@ public class Main {
 		}
 		 FileWriter fw = new FileWriter(dataFile.getAbsoluteFile());
 		 BufferedWriter bw = new BufferedWriter(fw);
-		 bw.write(quadTree.toString("",quadTree));
+		 bw.write(quadTree.toString());
 		 bw.close();
 
 		 System.out.println("\nAjout réussi");
