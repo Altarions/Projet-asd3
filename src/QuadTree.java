@@ -14,11 +14,13 @@ public class QuadTree {
 	 * @param centerX: position X of the quadTree
 	 * @param centerY: position Y of the quadTree
 	 * @param widthX:
+	 * @throws Throwable 
 	 */
-	public QuadTree(ImagePNG img, Integer centerX, Integer centerY, Integer widthX){
+	public QuadTree(ImagePNG img, Integer centerX, Integer centerY, Integer widthX) throws Throwable{
 		this.centerX = centerX;
 		this.centerY = centerY;
 		this.widthX = widthX;
+		
 		this.setVide(false);
 		
 		if(this.widthX > 1) {
@@ -28,9 +30,9 @@ public class QuadTree {
 			this.filsNE = new QuadTree(img, this.centerX+a, this.centerY-a, a);
 			this.filsSO = new QuadTree(img, this.centerX-a, this.centerY+a, a);
 			this.filsSE = new QuadTree(img, this.centerX+a, this.centerY+a, a);
-			
+			this.compressWithNoLost();
 		}else {
-			if(this.isVide() != true && this.widthX == 1) {
+			if(this.isVide() == false && this.widthX == 1) {
 				this.filsNO = new QuadTree(img, this.centerX-1, this.centerY-1, 0);
 				this.filsNE = new QuadTree(img, this.centerX, this.centerY-1, 0);
 				this.filsSO = new QuadTree(img, this.centerX-1, this.centerY, 0);
@@ -41,7 +43,6 @@ public class QuadTree {
 				this.setColorPixel(img.getPixel(this.centerX, this.centerY));
 			}
 		}
-		
 	}
 	
 	//GET AND SET
@@ -59,50 +60,60 @@ public class QuadTree {
 	public Color getColorPixel() {return colorPixel;}
 	public void setColorPixel(Color colorPixel) {this.colorPixel = colorPixel;}
 	
+	public void compressWithNoLost() throws Throwable {
+		if(this.hasNoKids() != true) {	
+			this.filsNE.compressWithNoLost();
+			this.filsNO.compressWithNoLost();
+			this.filsSE.compressWithNoLost();
+			this.filsSO.compressWithNoLost();
+				
+		}else {
+			if(this.sameKids()) {
+				System.out.println(this.avgColor());
+				this.colorPixel = this.getfilsNE().colorPixel;
+				this.deleteKids();		
+			}		
+		}
+	}
 
 	/**
 	 * @role: compress the quadtree.
 	 * @param delta
+	 * @throws Throwable 
 	 */
-	public void compressDelta(Integer delta) {
+	public void compressDelta(Integer delta) throws Throwable {
         if (delta > 192 || delta < 0) {
             System.out.println("detla's value is wrong");
         }else {
-            if (parentOf4Colors()) {
-            	if(sameKids()) {
-            		this.setColorPixel(this.getfilsNO().getColorPixel());
-            		this.deleteKids();
-            	}
-
-                int test = (int) this.colorimetricDifference(this.avgColor());
-                Color deltaColor = new Color(test,test,test);
-                if ( test  <= delta) {
-                // replace 4 nodes by the avg color
-
-                    this.setColorPixel(deltaColor);
-                    this.deleteKids();
-                }
-            }else {
-                filsNE.compressDelta(delta);
-                filsNO.compressDelta(delta);
-                filsSE.compressDelta(delta);
-                filsSO.compressDelta(delta);
-            } 
+        	if(this.hasNoKids() != true) {	
+    			this.filsNE.compressDelta(delta);
+    			this.filsNO.compressDelta(delta);
+    			this.filsSE.compressDelta(delta);
+    			this.filsSO.compressDelta(delta);
+    				
+    		}else {
+    			if(colorimetricDifference(avgColor()) <= delta) {
+    				this.colorPixel = this.avgColor();
+    				this.deleteKids();
+    				
+    			}
+    		}
         }
 	}
 	
 	/**
 	 * @role
 	 * @param phi
+	 * @throws Throwable 
 	 */
-	public void compressPhi(Integer phi) {
+	public void compressPhi(Integer phi) throws Throwable {
 		if( phi < 0) {
 			System.out.println("phi cant be negative");
 			
 		}else {
 			if ( this.leavesNumber() > phi){
 				
-				if (this.parentOf4Colors()) {
+				if (this.hasNoKids()) {
 					Color deltaColor = this.avgColor();
 					this.setColorPixel(deltaColor);
 					this.deleteKids();
@@ -186,12 +197,13 @@ public class QuadTree {
 		 return res; 
 	}
 
-	public void deleteKids() {
+	@SuppressWarnings("deprecation")
+	public void deleteKids() throws Throwable {
 		
-		this.filsNE = null;
-		this.filsNO = null;
-		this.filsSE = null;
-		this.filsSO = null;
+		this.filsNE.finalize();
+		this.filsNO.finalize();
+		this.filsSE.finalize();
+		this.filsSO.finalize();
 		this.vide = true;
 
 	}
@@ -201,13 +213,11 @@ public class QuadTree {
 	}
 	
 	private boolean sameKids() {
-	    return this.getfilsNE().getColorPixel() == this.getfilsNO().getColorPixel() && this.getfilsSE().getColorPixel() == this.getfilsSO().getColorPixel() && this.getfilsNE().getColorPixel() == this.getfilsSE().getColorPixel() ;
+	    return (this.getfilsNE().getColorPixel().equals(this.getfilsNO().getColorPixel()) && this.getfilsSE().getColorPixel().equals(this.getfilsSO().getColorPixel()) && this.getfilsNE().getColorPixel().equals(this.getfilsSE().getColorPixel())) ;
 	}
-	public boolean parentOf4Colors() {
-        boolean res = (this.getfilsNE().isVide() && this.getfilsNO().isVide() && this.getfilsSE().isVide() && this.getfilsSO().isVide());
-        return res;
-    }
 	
+	
+	@Override
 	public String toString() {
 		
 		if(this.isVide() != true) {

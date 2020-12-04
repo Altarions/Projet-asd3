@@ -13,7 +13,13 @@ public class Main {
     	
     	
         try {
-
+        	png = new ImagePNG("./src/pngs/32-tux.png");
+        	quadTree = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
+        	//System.out.println(quadTree.toString());
+        	quadTree.compressDelta(30);
+        	//System.out.println(quadTree.toString());
+        	
+        	/*
         	int choix = menu();
         			
         	
@@ -35,11 +41,14 @@ public class Main {
         	System.out.println("\n");
         	if(choix != 7) {
         		main(args);
-        	}
+        	}*/
         	
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 	private static int menu() {
@@ -57,7 +66,7 @@ public class Main {
 		return sc.nextInt();
 	}
 
-	private static void loadImg() throws IOException {
+	private static void loadImg() throws Throwable {
 		
 		int choix;
 		String adress = "./src/pngs/";
@@ -108,7 +117,7 @@ public class Main {
 		
 		
 	}
-	private static void delta() {
+	private static void delta() throws Throwable {
 		
 		System.out.println("Choisissez un delta pour la compression : ");
 		int delta = sc.nextInt();
