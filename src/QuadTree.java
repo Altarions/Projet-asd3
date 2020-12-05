@@ -111,8 +111,7 @@ public class QuadTree {
 	
 	/**
 	 * @role
-	 * @param phi
-	 * @throws Throwable 
+	 * @param phi 
 	 */
 	public void compressPhi(Integer phi) {
 		if( phi < 0) {
@@ -140,32 +139,35 @@ public class QuadTree {
 	/**
 	 * @role
 	 * @param img
-	 * @param quadTree
 	 * @return
 	 */
 	public ImagePNG toPNG(ImagePNG img) {
-		ImagePNG newImg =  new ImagePNG(img);
+        ImagePNG newImg = toPNG_rec(img);
+		return newImg;
+	}
+	
+	private ImagePNG toPNG_rec(ImagePNG img) {
 		
 		if(this.isVide() != true) {
-			newImg = this.filsNO.toPNG(newImg);
-			newImg = this.filsNE.toPNG(newImg);
-			newImg = this.filsSO.toPNG(newImg);
-			newImg = this.filsSE.toPNG(newImg);
+			img = this.filsNO.toPNG(img);
+			img = this.filsNE.toPNG(img);
+			img = this.filsSO.toPNG(img);
+			img = this.filsSE.toPNG(img);
 				
 		}else {
 			if(this.widthX == 0) {
-				newImg.setPixel(this.centerX, this.centerY, this.colorPixel);
+				img.setPixel(this.centerX, this.centerY, this.colorPixel);
 			}else {
 				int x = this.getcenterX()-this.widthX;
 				int y = this.getcenterY()-this.widthX;
 				
 				for(int i=0; i<this.widthX*2;i++) {
-					newImg.setPixel(x+i, y+i, this.colorPixel);
+					img.setPixel(x+i, y+i, this.colorPixel);
 				}
 			}
 		}
 		
-		return newImg;
+		return img;
 	}
 	public int leavesNumber() {
 		int res = 0;
@@ -237,6 +239,8 @@ public class QuadTree {
         boolean res = (this.getfilsNE().isVide() && this.getfilsNO().isVide() && this.getfilsSE().isVide() && this.getfilsSO().isVide());
         return res;
     }
+	
+	
 	
 	@Override
 	public String toString() {

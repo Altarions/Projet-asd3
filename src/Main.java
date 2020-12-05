@@ -10,21 +10,21 @@ public class Main {
 	private static QuadTree quadTree;
 	
     public static void main( String[] args ){
+    	long testCompressionDelta = System.currentTimeMillis();
     	
     	
         try {
-        	png = new ImagePNG("./src/pngs/512-books.png");
+        	png = new ImagePNG("./src/pngs/1024-cube.png");
         	quadTree = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
-        	System.out.println(quadTree.toString());
-        	System.out.println("nb de feuille : "+quadTree.leavesNumber());
+        	//System.out.println(quadTree.toString());
+        	//System.out.println("nb de feuille : "+quadTree.leavesNumber());
         	
         	quadTree.compressDelta(190);
-        	System.out.println("\n"+quadTree.toString());
-        	System.out.println("nb de feuille : "+quadTree.leavesNumber());
-        	
-        	ImagePNG newPng = quadTree.toPNG(png);
-            newPng.save("./src/result/result.png");
-            System.out.println("\nAjout réussi\n");
+        	//System.out.println("\n"+quadTree.toString());
+        	//System.out.println("nb de feuille : "+quadTree.leavesNumber());
+        	 
+            //System.out.println("\nAjout réussi\n");
+        	System.out.println("Delta : " + (System.currentTimeMillis() - testCompressionDelta) / 1000.0);
         	/*
         	int choix = menu();
         			
