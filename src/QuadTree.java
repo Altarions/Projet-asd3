@@ -114,6 +114,11 @@ public class QuadTree {
 	 * @param phi 
 	 */
 	public void compressPhi(Integer phi) {
+		
+		compressPhi_rec(phi);
+	}
+	
+	public void compressPhi_rec(Integer phi) {
 		if( phi < 0) {
 			System.out.println("phi cant be negative");
 			
@@ -135,6 +140,7 @@ public class QuadTree {
 		}
 				
 	}
+	
 	
 	/**
 	 * @role
