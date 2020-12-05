@@ -13,12 +13,18 @@ public class Main {
     	
     	
         try {
-        	png = new ImagePNG("./src/pngs/32-tux.png");
+        	png = new ImagePNG("./src/pngs/512-books.png");
         	quadTree = new QuadTree(png, png.width()/2, png.height()/2, png.width()/2);
-        	//System.out.println(quadTree.toString());
-        	quadTree.compressDelta(30);
-        	//System.out.println(quadTree.toString());
+        	System.out.println(quadTree.toString());
+        	System.out.println("nb de feuille : "+quadTree.leavesNumber());
         	
+        	quadTree.compressDelta(190);
+        	System.out.println("\n"+quadTree.toString());
+        	System.out.println("nb de feuille : "+quadTree.leavesNumber());
+        	
+        	ImagePNG newPng = quadTree.toPNG(png);
+            newPng.save("./src/result/result.png");
+            System.out.println("\nAjout réussi\n");
         	/*
         	int choix = menu();
         			
@@ -45,10 +51,7 @@ public class Main {
         	
         } catch (Exception e) {
             e.printStackTrace();
-        } catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        } 
     }
 
 	private static int menu() {
@@ -66,7 +69,7 @@ public class Main {
 		return sc.nextInt();
 	}
 
-	private static void loadImg() throws Throwable {
+	private static void loadImg() throws IOException {
 		
 		int choix;
 		String adress = "./src/pngs/";
@@ -117,7 +120,7 @@ public class Main {
 		
 		
 	}
-	private static void delta() throws Throwable {
+	private static void delta() {
 		
 		System.out.println("Choisissez un delta pour la compression : ");
 		int delta = sc.nextInt();
@@ -133,7 +136,7 @@ public class Main {
 	}
 	private static void savePng() throws IOException {
 		
-		ImagePNG newPng = quadTree.toPNG(png, quadTree);
+		ImagePNG newPng = quadTree.toPNG(png);
 		
         newPng.save("./src/result/result.png");
         System.out.println("\nAjout réussi\n");
