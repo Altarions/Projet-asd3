@@ -84,7 +84,7 @@ public class QuadTree {
 	 * @param delta
 	 * @throws Throwable 
 	 */
-	public void compressDelta(Integer delta) {
+	public void compressDelta(int delta) {
         if (delta > 192 || delta < 0) {
             System.out.println("detla's value is wrong");
         }else {
